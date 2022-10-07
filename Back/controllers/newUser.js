@@ -1,14 +1,14 @@
 'use strict'
-const {generateError } = require("../helpers");
 
-const newUser = async (req, res, next) =>{
+const { validate, generateRandomString, generateError, sendEmail } = require("../helpers");
+const { registrationSchema } = require("../schemas");
+
+const newUser = async (req, res)=>{
     //let connection;
     try {
-        //se realiza la conexión
-        //connection = ;
-
-        //Se extrae el email y la password que envia el cliente por el body
         const { email, password } = req.body;
+        res.writeHead(200, {'Content-Type': 'application/json'})
+        res.end(JSON.stringify(email , password))
 
         //Campo email obligatorio
         if (!email) {
@@ -21,20 +21,9 @@ const newUser = async (req, res, next) =>{
         }
 
         //Se valida el forma del email y la password
-       await validate(registrationSchema, req.body);
+       //await validate(registrationSchema, req.body);
 
-        //Se realiza la búsqueda del email en la bd
-        /*const [existingUser] = await connection.query(`
-        SELECT id_user
-        FROM users
-        WHERE email=?
-        `, [email]);*/
 
-        //Si el email existe se genera un error 409(conflict)
-        if (existingUser.length > 0) {
-            generateError('The email is exists already', 409)
-
-        }
 
         //Se genera un código de registro
         const registration_code = generateRandomString(40);
@@ -42,8 +31,7 @@ const newUser = async (req, res, next) =>{
         //Se envia el email de verificación al usuario
         const verificationLink = `${process.env.HOST_PUBLIC}/users/validate/${registration_code}`
 
-        //configurar la plantilla del email
-        const template = await fs.readFile(filePath, 'utf-8');
+        
 
     
 
@@ -57,13 +45,7 @@ const newUser = async (req, res, next) =>{
             })
         });
 
-        //Se añaden los datos en local storage
-        //await connection.query(`
-           // INSERT INTO users ( email, password, registration_code)
-            //VALUES(?, SHA2(? , 512), ?)
-        //`, [email, password, registration_code]);
-
-
+       
         res.status(201).send({
             status: "ok",
             message: "Please check your e-mail and click on the code that has been sent",
@@ -73,14 +55,14 @@ const newUser = async (req, res, next) =>{
         });
 
     } catch (error) {
-        next(error);
+        console.log(error);
 
     } finally {
-        //Se suelta la conexión
-        //if (connection) connection.release();
+   
+        
 
     }
 
 }
+module.exports = {newUser};
 
-module.exports = newUser;

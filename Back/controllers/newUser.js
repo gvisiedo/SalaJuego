@@ -6,9 +6,18 @@ const { registrationSchema } = require("../schemas");
 const newUser = async (req, res)=>{
     //let connection;
     try {
-        const { email, password } = req.body;
-        res.writeHead(200, {'Content-Type': 'application/json'})
-        res.end(JSON.stringify(email , password))
+
+        let body = ''
+        req.on('data', (chunk)=>{
+            body += chunk.toString()
+        })
+        req.on('end', ()=>{
+            const { email, password } = JSON.parse(body);
+
+            res.writeHead(200, {'Content-Type': 'application/json'})
+            res.end(JSON.stringify(email , password))
+        })
+        
 
         //Campo email obligatorio
         if (!email) {

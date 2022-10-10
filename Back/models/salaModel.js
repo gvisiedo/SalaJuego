@@ -2,6 +2,13 @@ const user = require('../data/jugador.json')
 
 const {writeDataToFile} = require('../utils')
 
+function loginUser(email){
+    return new Promise((resolve, reject)=>{
+        const user =user.find((e)=>e.email ===email)
+    })
+
+}
+
 function crearSala(user){
     return new Promise((resolve, reject)=>{
         const newSala = {sala: sala+1, ...user}
@@ -12,4 +19,4 @@ function crearSala(user){
 
 }
 
-module.exports = {crearSala}
+module.exports = {crearSala, loginUser}

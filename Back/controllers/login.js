@@ -1,4 +1,6 @@
-const login = async (req, res)=>{
+const {login} = require('../models/salaModel')
+
+const loginUser = async (req, res)=>{
    
     try {
 
@@ -13,9 +15,9 @@ const login = async (req, res)=>{
                 email,
                 password
             }
-            const login = await user.findById(email)
+            const login = await user.loginUser()
             if(!email){
-                res.writeHead(201, {'Content-Type': 'application/json'})
+                res.writeHead(400, {'Content-Type': 'application/json'})
                 return res.end(JSON.stringify({message:'email or password not correct'}))
 
             }else{
@@ -37,4 +39,4 @@ const login = async (req, res)=>{
     } 
 
 }
-module.exports = {login};
+module.exports = {loginUser};

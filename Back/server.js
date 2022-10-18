@@ -1,26 +1,28 @@
-'use strict';
-const http =require('http');
+const http= require("http");
+const url = require("url");
+
+function iniciar(route, handle) {
+  function onRequest(request, response) {
+      const dataPosteada ="";
+      const pathname = url.parse(request.url).pathname;
+    console.log("Petición Recibida.");
+    request.setEncoding("utf8");
+
+    request.addListener("data", function(trozoPosteado) {
+      dataPosteada += trozoPosteado;
+      console.log("Recibido trozo POST '" + trozoPosteado + "'.");
+});
+
+request.addListener("end", function() {
+  route(handle, pathname, response, dataPosteada);
+});
 
 
-
-const PORT = process.env.PORT || 3000;
-const {newUser} =require('./controllers/newUser');
-const { loginUser } = require('./controllers/login');
-
-
-const server = http.createServer((req,res)=>{
-    if(req.url === '/api/signup' && req.method === 'POST' ){
-     newUser(req, res)
-    }else if(req.url === '/api/login' && req.method === 'POST' ){
-     loginUser(req, res)
-    }else{
-        res.writeHead(404, {'Content-Type': 'application/json'})
-        res.end(JSON.stringify({message: 'Not Found'})) 
-    }
     
-})
+  }
 
+  http.createServer(onRequest).listen(3000);
+  console.log("Servidor Iniciado.");
+}
 
-
-
-server.listen(PORT, ()=> console.log(`Heyyyy I'm here!!! Listening from the port ${PORT}`))
+exports.iniciar = iniciar;

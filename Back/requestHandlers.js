@@ -22,11 +22,12 @@ function iniciar(response) {
   }
   
   function subir(response, dataPosteada) {
-    console.log("Manipulador de Peticion 'subir' fue llamado.");
+    console.log("Manipulador de peticion 'subir' fue llamado.");
     response.writeHead(200, {"Content-Type": "text/html"});
-    response.write("Tu enviaste: " + dataPosteada);
+    response.write("Tu enviaste el texto: : " +
+    querystring.parse(dataPosteada)["text"]);
     response.end();
-  }
+}
 
 exports.iniciar = iniciar;
 exports.subir = subir;

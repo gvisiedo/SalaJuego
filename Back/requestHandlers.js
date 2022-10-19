@@ -3,13 +3,17 @@ const querystring =require("querystring");
 function iniciar(response) {
     console.log("Manipulador de petición 'iniciar' fue llamado.");
   
-    var body = '<html>'+
+    const body = '<html>'+
     '<head>'+
     '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />'+
     '</head>'+
     '<body>'+
     '<form action="/subir" method="post">'+
-    '<textarea name="text" rows="20" cols="60"></textarea>'+
+    
+   
+    '<input type"email" name="text" value="email"/>'+
+    '<input type"password" name="password" value="password"/>'+
+
     '<input type="submit" value="Enviar texto" />'+
     '</form>'+
     '</body>'+
